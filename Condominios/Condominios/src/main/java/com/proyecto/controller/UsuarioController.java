@@ -39,11 +39,23 @@ public class UsuarioController {
 
 
 	 @GetMapping("/login")
-	    public String login() {
-	        return "login"; // esto busca templates/login.html
+	    public String login(@RequestParam(value = "error", required = false) String error,
+                @RequestParam(value = "mensaje", required = false) String mensaje,
+                Model model) {
+		 
+		 if (mensaje != null) {
+			    model.addAttribute("error", mensaje);
+			}
+
+	        return "login"; 
 	    }
-	 
-	
+	 @GetMapping("/error_login")
+	 public String mostrarErrorLogin(@RequestParam(value = "mensaje", required = false) String mensaje, Model model) {
+	     if (mensaje != null) {
+	         model.addAttribute("error", mensaje);
+	     }
+	     return "error_login"; // el nombre de la plantilla Thymeleaf error_login.html
+	 }
 
 	 @GetMapping("/usuario/registro")
 	    public String mostrarFormulario(Model model) {
@@ -61,6 +73,12 @@ public class UsuarioController {
 	    	) {
 	    	    if (usuarioRepo.findByEmail(usuario.getEmail()) != null) {
 	    	        model.addAttribute("error", "El correo ya está registrado.");
+	    	        return "registro";
+	    	    }
+	    	    
+	    	    // Validar cédula
+	    	    if (propietarioRepo.findByCedula(cedula) != null) {
+	    	        model.addAttribute("error", "La cédula ya está registrada.");
 	    	        return "registro";
 	    	    }
 	    	    

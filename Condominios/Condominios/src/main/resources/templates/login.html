@@ -18,11 +18,14 @@
     <img src="/images/logo_edi.jpg" alt="Logo Edificio" style="max-width: 250px; height: 250px;">
 </div>
                     <!-- Muestra mensaje de error si Spring Security devuelve un fallo -->
-                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                        Usuario o contraseña incorrectos.
-                    </div>
+                    
+                    <div th:if="${error}" class="alert alert-danger">
+    <span th:text="${error}"></span>
+</div>
 
                     <form th:action="@{/login}" method="post">
+                    
+                    
                         <div class="mb-3">
                             <label for="username" class="form-label">Correo electrónico</label>
                             <input type="text" class="form-control" id="username" name="username" required>

@@ -22,7 +22,11 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService{
 		// TODO Auto-generated method stub
 		Usuario usuario = usuarioRepository.findByEmail(email);
                 
-        return new CustomUserDetails(usuario);
+		if (usuario == null) {
+	        throw new UsernameNotFoundException("Usuario no encontrado con email: " + email);
+	    }
+		 System.out.println("Usuario encontrado: " + usuario.getEmail() + ", password: " + usuario.getPassword());
+	    return new CustomUserDetails(usuario);
 	}
 
 }
