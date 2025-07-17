@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Reporte de Alícuotas de Propietario" />
+    <meta name="author" content="JPERALTA|NGORDON" />
+
+    <title>Reporte de Alícuotas de Propietario</title>
+
+    <style type="text/css">
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 10pt;
+            margin: 20mm; /* Márgenes para el PDF */
+            color: #333;
+        }
+        h1 {
+            color: #1a202c; /* Color oscuro para el título */
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 18pt;
+        }
+        h2 {
+            color: #2d3748; /* Color un poco más claro para subtítulos */
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 14pt;
+        }
+        .info-propietario {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .info-propietario p {
+            margin: 5px 0;
+        }
+        .info-propietario strong {
+            color: #4a5568;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #cdd0d3; /* Borde más suave */
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #edf2f7; /* Fondo para encabezados de tabla */
+            font-weight: bold;
+            color: #2d3748;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f7fafc; /* Color de fila par */
+        }
+        .estado-PAGADO {
+            color: green;
+            font-weight: bold;
+        }
+        .estado-PENDIENTE {
+            color: orange;
+            font-weight: bold;
+        }
+        .estado-VENCIDO {
+            color: red;
+            font-weight: bold;
+        }
+        .alert-info {
+            background-color: #e0f2f7;
+            border: 1px solid #b2e2f2;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Alícuotas de Propietario</h1>
+
+    <div class="info-propietario">
+        <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
+        <p><strong>Cédula:</strong> <span th:text="${propietario.cedula}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+        <p><strong>Fecha de Reporte:</strong> <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy')}"></span></p>
+    </div>
+
+    <h2>Detalle de Alícuotas</h2>
+
+    <div th:if="${alicuotas != null and !alicuotas.isEmpty()}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Departamento</th>
+                    <th>Mes</th>
+                    <th>Año</th>
+                    <th>Valor Calculado</th>
+                    <th>Estado</th>
+                    <th>Fecha de Pago</th>
+                    <th>Observaciones Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="alicuota : ${alicuotas}">
+                    <td th:text="${alicuota.departamento?.numero}"></td>
+                    <td th:text="${alicuota.mes}"></td>
+                    <td th:text="${alicuota.anio}"></td>
+                    <td th:text="${#numbers.formatDecimal(alicuota.valorCalculado, 1, 2)}"></td>
+                    <td th:classappend="${alicuota.pago != null} ? 'estado-' + ${alicuota.pago.estado} : 'estado-PENDIENTE'">
+                        <span th:text="${alicuota.pago != null ? alicuota.pago.estado : 'PENDIENTE'}"></span>
+                    </td>
+                    <td th:text="${alicuota.pago != null ? #temporals.format(alicuota.pago.fechaPago, 'dd/MM/yyyy') : 'N/A'}"></td>
+                    <td th:text="${alicuota.pago != null ? alicuota.pago.observaciones : 'N/A'}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${alicuotas == null or alicuotas.isEmpty()}" class="alert-info">
+        <p>No se encontraron alícuotas para sus departamentos.</p>
+    </div>
+</body>
+</html>

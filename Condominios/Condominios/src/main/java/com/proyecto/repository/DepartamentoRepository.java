@@ -12,6 +12,8 @@ import com.proyecto.entity.Propietario;
 
 public interface DepartamentoRepository extends JpaRepository<Departamento, Integer> {
 	List<Departamento> findByEdificio(Edificio edificio);
-	 boolean existsByNumeroAndEdificio(String numero, Edificio edificio);
+	boolean existsByNumeroAndEdificio(String numero, Edificio edificio);
 	
+	List<Departamento> findByPropietario(Propietario propietario);
+	 
 }

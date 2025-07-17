@@ -12,44 +12,39 @@ import com.proyecto.entity.Propietario;
 import com.proyecto.repository.DepartamentoRepository;
 import com.proyecto.repository.PropietarioRepository;
 import com.proyecto.service.DepartamentoService;
+
 @Service
 @Transactional
 public class DepartamentoServiceImpl implements DepartamentoService {
 
 	@Autowired
-    private DepartamentoRepository departamentoRepository;
+	private DepartamentoRepository departamentoRepository;
 	@Autowired
 	private DepartamentoRepository departamentoRepo;
+
 	@Override
 	public List<Departamento> findAllDepartamento() {
 		// TODO Auto-generated method stub
 		return departamentoRepository.findAll();
 	}
 
-	
-	
-	
-	
-	
 	@Override
 	public Departamento saveDepartamento(Departamento departamento) {
 		// TODO Auto-generated method stub
-		 // Obtener todos los departamentos actuales del edificio
-	    List<Departamento> departamentosActuales = departamentoRepo.findByEdificio(departamento.getEdificio());
+		// Obtener todos los departamentos actuales del edificio
+		List<Departamento> departamentosActuales = departamentoRepo.findByEdificio(departamento.getEdificio());
 
-	    // Sumar metros cuadrados existentes
-	    double totalMetros = departamentosActuales.stream()
-	            .mapToDouble(Departamento::getMetrosCuadrados)
-	            .sum();
+		// Sumar metros cuadrados existentes
+		double totalMetros = departamentosActuales.stream().mapToDouble(Departamento::getMetrosCuadrados).sum();
 
-	    // Sumar el nuevo departamento (que aún no se ha guardado)
-	    totalMetros += departamento.getMetrosCuadrados();
+		// Sumar el nuevo departamento (que aún no se ha guardado)
+		totalMetros += departamento.getMetrosCuadrados();
 
-	    // Calcular porcentaje para el nuevo
-	    double porcentaje = (departamento.getMetrosCuadrados() / totalMetros) * 100;
+		// Calcular porcentaje para el nuevo
+		double porcentaje = (departamento.getMetrosCuadrados() / totalMetros) * 100;
 
-	    // Asignar al campo
-	    departamento.setPorcentajeAlicuota(porcentaje);
+		// Asignar al campo
+		departamento.setPorcentajeAlicuota(porcentaje);
 		return departamentoRepository.save(departamento);
 	}
 
@@ -62,88 +57,66 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 	@Override
 	public Departamento updateDepartamento(int id, Departamento detalle) {
 		// TODO Auto-generated method stub
-		 Departamento departamento = departamentoRepository.findById(id)
-	                .orElseThrow(() -> new RuntimeException("Departamento no encoentrado :: " + id));
-	        
-		 // Actualizar los datos
-		    departamento.setNumero(detalle.getNumero());
-		    departamento.setMetrosCuadrados(detalle.getMetrosCuadrados());
-		    departamento.setEdificio(detalle.getEdificio());
-		    departamento.setPropietario(detalle.getPropietario());
+		Departamento departamento = departamentoRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Departamento no encoentrado :: " + id));
 
-		    // Guardar primero
-		    Departamento actualizado = departamentoRepository.save(departamento);
+		// Actualizar los datos
+		departamento.setNumero(detalle.getNumero());
+		departamento.setMetrosCuadrados(detalle.getMetrosCuadrados());
+		departamento.setEdificio(detalle.getEdificio());
+		departamento.setPropietario(detalle.getPropietario());
 
-		    // Recalcular alícuotas del edificio completo
-		    recalcularAlicuotas(detalle.getEdificio());
+		// Guardar primero
+		Departamento actualizado = departamentoRepository.save(departamento);
 
-		    return actualizado;
+		// Recalcular alícuotas del edificio completo
+		recalcularAlicuotas(detalle.getEdificio());
+
+		return actualizado;
 	}
-
-
-
-
-
 
 	@Override
 	public void guardaryRecalcular(Departamento departamento) {
 		// TODO Auto-generated method stub
-		 if (existsByNumeroAndEdificio(departamento.getNumero(), departamento.getEdificio())) {
-		        throw new RuntimeException("Ya existe un departamento con ese número en el edificio");
-		    }
+		if (existsByNumeroAndEdificio(departamento.getNumero(), departamento.getEdificio())) {
+			throw new RuntimeException("Ya existe un departamento con ese número en el edificio");
+		}
 		// Guardar o actualizar el nuevo departamento
-	    departamentoRepo.save(departamento);
+		departamentoRepo.save(departamento);
 
-	    // Recalcular todos los porcentajes del edificio
-	    recalcularAlicuotas(departamento.getEdificio());
+		// Recalcular todos los porcentajes del edificio
+		recalcularAlicuotas(departamento.getEdificio());
 	}
-
-
-
-
-
 
 	@Override
 	public void eliminaryRecalcular(int id) {
 		// TODO Auto-generated method stub
 		Departamento depto = departamentoRepo.findById(id).orElseThrow();
-	    Edificio edificio = depto.getEdificio();
-	    
-	    // Eliminar
-	    departamentoRepo.deleteById(id);
+		Edificio edificio = depto.getEdificio();
 
-	    // Recalcular después de eliminar
-	    recalcularAlicuotas(edificio);
+		// Eliminar
+		departamentoRepo.deleteById(id);
+
+		// Recalcular después de eliminar
+		recalcularAlicuotas(edificio);
 	}
-
-
-
-
-
 
 	@Override
 	public void recalcularAlicuotas(Edificio edificio) {
 		// TODO Auto-generated method stub
-		 List<Departamento> departamentos = departamentoRepo.findByEdificio(edificio);
+		List<Departamento> departamentos = departamentoRepo.findByEdificio(edificio);
 
-		    double totalMetros = departamentos.stream()
-		        .mapToDouble(Departamento::getMetrosCuadrados)
-		        .sum();
+		double totalMetros = departamentos.stream().mapToDouble(Departamento::getMetrosCuadrados).sum();
 
-		    for (Departamento d : departamentos) {
-		        double porcentaje = (d.getMetrosCuadrados() / totalMetros) * 100;
-		        d.setPorcentajeAlicuota(porcentaje);
-		    }
+		for (Departamento d : departamentos) {
+			double porcentaje = (d.getMetrosCuadrados() / totalMetros) * 100;
+			d.setPorcentajeAlicuota(porcentaje);
+		}
 
-		    // Guardar todos
-		    departamentoRepo.saveAll(departamentos);
-			
+		// Guardar todos
+		departamentoRepo.saveAll(departamentos);
+
 	}
-
-
-
-
-
 
 	@Override
 	public boolean existsByNumeroAndEdificio(String numero, Edificio edificio) {
@@ -151,21 +124,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 		return departamentoRepo.existsByNumeroAndEdificio(numero, edificio);
 	}
 
-
-
-
-
-
 	@Override
 	public Departamento findById(Integer id) {
 		// TODO Auto-generated method stub
 		return departamentoRepo.findById(id).orElse(null);
 	}
 
+	@Override
+	public List<Departamento> findByPropietario(Propietario propietario) {
+        return departamentoRepository.findByPropietario(propietario);
+	}
 
-
-
-
-
-	
 }
