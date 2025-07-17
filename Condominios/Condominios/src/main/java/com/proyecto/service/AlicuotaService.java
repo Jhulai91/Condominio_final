@@ -2,6 +2,7 @@ package com.proyecto.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.proyecto.entity.Alicuota;
 import com.proyecto.entity.Departamento;
@@ -30,5 +31,8 @@ public interface AlicuotaService {
     Map<String, Long> getAlicuotasCountByStateForDepartamentos(List<Departamento> departamentos);
 
     // Opcional: Si quieres el valor total por estado
-    Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);    
+    Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);  
+    
+    Optional<Alicuota> findAlicuotaById(Integer id); // Asegúrate de tener este método
+    //Alicuota saveAlicuota(Alicuota alicuota); // Nuevo método
 }
