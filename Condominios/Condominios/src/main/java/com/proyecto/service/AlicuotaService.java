@@ -34,9 +34,5 @@ public interface AlicuotaService {
     Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);   
     
     Double obtenerTotalAlicuotas();
-
-    Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);  
-    
     Optional<Alicuota> findAlicuotaById(Integer id); // Asegúrate de tener este método
-    //Alicuota saveAlicuota(Alicuota alicuota); // Nuevo método
 }
