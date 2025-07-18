@@ -135,4 +135,10 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         return departamentoRepository.findByPropietario(propietario);
 	}
 
+	@Override
+	public long contarDepartamentos() {
+		// TODO Auto-generated method stub
+		   return departamentoRepository.count();
+	}
+
 }

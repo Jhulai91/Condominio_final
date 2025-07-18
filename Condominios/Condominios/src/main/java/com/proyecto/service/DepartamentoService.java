@@ -17,6 +17,6 @@ public interface DepartamentoService {
     Departamento updateDepartamento(int id, Departamento detalle);
     boolean existsByNumeroAndEdificio(String numero,Edificio edificio);
     Departamento findById(Integer id);
-    
+    long contarDepartamentos();
     List<Departamento> findByPropietario(Propietario propietario);
 }

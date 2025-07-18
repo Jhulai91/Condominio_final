@@ -13,7 +13,7 @@ public interface PropietarioService {
     Propietario updatePropietario(int id, Propietario detalle);
    // Propietario calcularNotaFinal(Propietario propietario);
     Propietario findById(Long id);
-    
+    long contarPropietarios();
     Optional<Propietario> obtenerPropietarioPorEmailUsuario(String emailUsuario);
     
 }

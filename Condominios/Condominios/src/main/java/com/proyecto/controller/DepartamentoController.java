@@ -44,8 +44,8 @@ public class DepartamentoController {
 	@GetMapping("/departamento/lista")
 	public String listarDepartamentos(Model model,  Principal principal) {
 		List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	     
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 		
@@ -55,7 +55,7 @@ public class DepartamentoController {
 	    return "departamento_lista";
 	}
 	
-	 // Mostrar formulario nuevo autor
+	 
     @GetMapping("/departamento/nuevo")
     public String mostrarFormulario(Model model, Principal principal) {
     	
@@ -63,8 +63,8 @@ public class DepartamentoController {
     	model.addAttribute("propietarios", propietarios);
     	
     	List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	     
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
     	
@@ -73,18 +73,18 @@ public class DepartamentoController {
         model.addAttribute("edificios", edificioService.findAllEdificio());
         //model.addAttribute("propietarios", usuarioRepo.findAllPropietarios());
        // model.addAttribute("propietarios", propietarioService.findAllPropieatrio());
-        return "departamento_ingreso"; // nombre del html
+        return "departamento_ingreso"; 
     }
     
     @PostMapping("/departamento/guardar")
     public String guardarDepartamento(@ModelAttribute Departamento departamento,Model model, Principal principal) {
-    	 // Validar número único dentro del edificio
+    	 
         if (departamentoService.existsByNumeroAndEdificio(departamento.getNumero(), departamento.getEdificio())) {
             model.addAttribute("departamento", departamento);
             model.addAttribute("edificios", edificioService.findAllEdificio());
             model.addAttribute("propietarios", usuarioRepo.findAllPropietarios());
 
-            // Usuario autenticado
+            
             String email = principal.getName();
             Usuario usuario = usuarioRepo.findByEmail(email);
             model.addAttribute("usuarioAutenticado", usuario);
@@ -111,8 +111,8 @@ public class DepartamentoController {
     public String mostrarFormularioEditar(@PathVariable Integer id, Model model, Principal principal) {
     	
     	List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	    
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 		

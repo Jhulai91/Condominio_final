@@ -30,5 +30,8 @@ public interface AlicuotaService {
     Map<String, Long> getAlicuotasCountByStateForDepartamentos(List<Departamento> departamentos);
 
     // Opcional: Si quieres el valor total por estado
-    Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);    
+    Map<String, Double> getAlicuotasSumValueByStateForDepartamentos(List<Departamento> departamentos);   
+    
+    Double obtenerTotalAlicuotas();
+
 }

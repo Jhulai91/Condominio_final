@@ -54,7 +54,7 @@ public class UsuarioController {
 	     if (mensaje != null) {
 	         model.addAttribute("error", mensaje);
 	     }
-	     return "error_login"; // el nombre de la plantilla Thymeleaf error_login.html
+	     return "error_login"; 
 	 }
 
 	 @GetMapping("/usuario/registro")
@@ -76,7 +76,7 @@ public class UsuarioController {
 	    	        return "registro";
 	    	    }
 	    	    
-	    	    // Validar cédula
+	    	   
 	    	    if (propietarioRepo.findByCedula(cedula) != null) {
 	    	        model.addAttribute("error", "La cédula ya está registrada.");
 	    	        return "registro";
@@ -84,13 +84,13 @@ public class UsuarioController {
 	    	    
 	    	    String hashedPassword = passwordEncoder.encode(usuario.getPassword());
 	    	    usuario.setPassword(hashedPassword);
-	    	    // Asignar el rol recibido
+	    	    
 	    	    usuario.setRol(Rol.valueOf(rol));
 
-	    	    // Guardar usuario
+	    	  
 	    	    Usuario nuevoUsuario = usuarioRepo.save(usuario);
 
-	    	    // Crear Propietario vinculado
+	    	  
 	    	    Propietario propietario = new Propietario();
 	    	    propietario.setCedula(cedula);
 	    	    propietario.setTelefono(telefono);
@@ -102,17 +102,17 @@ public class UsuarioController {
 	    	}
 	    
 	    
-	 // Mostrar lista de usuarios
+	
 	    @GetMapping("/usuario/editar-usuario")
 	    public String listarUsuarios(Model model, Principal principal) {
 	        List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	    
+	        String email = principal.getName();
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 
 	        model.addAttribute("usuarios", usuarios);
-	        return "usuarios_lista"; // Vista que mostrará la tabla
+	        return "usuarios_lista"; 
 	    }
 
 	    // Mostrar formulario de edición
@@ -139,7 +139,7 @@ public class UsuarioController {
 	    	Propietario propietario = usuario.getPropietario();
 
 	        if (propietario != null && propietario.getId() != null) {
-	            // Asegura que el propietario mantenga la relación con el usuario
+	           
 	            propietario.setUsuario(usuario);
 	        }
 
@@ -147,7 +147,7 @@ public class UsuarioController {
 	    	
 	    	usuarioRepo.save(usuario);
 	        return "redirect:/usuario/editar-usuario/" + usuario.getId() + "?actualizado=true";
-	       // return "redirect:/admin/usuarios"; // Redirige a la lista
+	       // return "redirect:/admin/usuarios";
 	    }
 	    
 	    @PostMapping("/usuario/eliminar")

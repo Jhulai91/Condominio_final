@@ -26,8 +26,8 @@ public class EdificioController {
     @GetMapping("/edificios/listar")
     public String listarEdificios(Model model, Principal principal) {
     	List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	    
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
     	
@@ -38,8 +38,8 @@ public class EdificioController {
     @GetMapping("/edificios/nuevo")
     public String mostrarFormularioNuevo(Model model, Principal principal) {
     	 List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	    
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
         model.addAttribute("edificio", new Edificio());
@@ -49,14 +49,14 @@ public class EdificioController {
     @PostMapping("/edificios/guardar")
     public String guardarEdificio(@ModelAttribute Edificio edificio) {
         edificioRepo.save(edificio);
-        return "redirect:/edificios/editar";
+        return "redirect:/edificios/listar";
     }
 
     @GetMapping("/edificios/editar/{id}")
     public String editarEdificio(@PathVariable Integer id, Model model, Principal principal) {
     	
-    	 // Obtener nombre del usuario autenticado
-        String email = principal.getName(); // si usas email como username
+    	
+        String email = principal.getName(); 
         Usuario usuario = usuarioRepo.findByEmail(email);
         model.addAttribute("usuarioAutenticado", usuario);
 	
@@ -70,7 +70,7 @@ public class EdificioController {
         Edificio edificioExistente = edificioRepo.findById(edificio.getId())
             .orElseThrow(() -> new IllegalArgumentException("ID de edificio inválido: " + edificio.getId()));
 
-        // Actualizamos solo los campos que deseas permitir editar
+        
         edificioExistente.setNombre(edificio.getNombre());
         edificioExistente.setDireccion(edificio.getDireccion());
         edificioExistente.setNumeroDepartamentos(edificio.getNumeroDepartamentos());
@@ -83,6 +83,6 @@ public class EdificioController {
     @GetMapping("/edificios/eliminar/{id}")
     public String eliminarEdificio(@PathVariable Integer id) {
         edificioRepo.deleteById(id);
-        return "redirect:/edificios/editar";
+        return "redirect:/edificios/listar";
     }
 }

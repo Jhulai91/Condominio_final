@@ -37,14 +37,14 @@ public class GastoComunalController {
 	    @GetMapping("/gastos/lista")
 		public String listarGastos(Model model,  Principal principal) {
 			List<Usuario> usuarios = usuarioRepo.findAll();
-		     // Obtener nombre del usuario autenticado
-		        String email = principal.getName(); // si usas email como username
+		    
+		        String email = principal.getName(); 
 		        Usuario usuario = usuarioRepo.findByEmail(email);
 		        model.addAttribute("usuarioAutenticado", usuario);
 		        Double total = gastoService.obtenerTotalGastos();
 		        model.addAttribute("totalGastos", total);
 			
-		    List<GastoComunal> gastocomunal = gastoService.findAllGasto(); // O servicio si usas uno
+		    List<GastoComunal> gastocomunal = gastoService.findAllGasto(); 
 		    model.addAttribute("gastocomunal", gastocomunal);
 		    return "gastos_lista";
 		}
@@ -59,12 +59,11 @@ public class GastoComunalController {
 	        model.addAttribute("gasto", new GastoComunal());
 	        model.addAttribute("edificios", edificioRepo.findAll());
 	        model.addAttribute("tiposGasto", tipoGastoRepository.findAll());
-	        // Usuario autenticado
+	      
 	        String email = principal.getName();
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	      //  model.addAttribute("usuarioAutenticado", usuario);
 	        model.addAttribute("usuarioAutenticado", usuarioRepo.findByEmail(email));
-	        // Agrega tipos de gasto si usas select
 	        model.addAttribute("tiposGasto", tipoGastoRepository.findAll());
 
 	        return "gastos_ingreso";
@@ -72,13 +71,13 @@ public class GastoComunalController {
 	    @PostMapping("/gastos/guardar")
 	    public String guardar(@ModelAttribute GastoComunal gasto,Model model, Principal principal) {
 	        
-	    	// Usuario autenticado
+	    	
 	        String email = principal.getName();
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	      //  model.addAttribute("usuarioAutenticado", usuario);
 	        model.addAttribute("usuarioAutenticado", usuarioRepo.findByEmail(email));
 	    	
-	    	// Calcular mes y año desde la fecha
+	    	
 	    	gasto.setMes(gasto.getFecha().getMonthValue());
 	        gasto.setAnio(gasto.getFecha().getYear());
 

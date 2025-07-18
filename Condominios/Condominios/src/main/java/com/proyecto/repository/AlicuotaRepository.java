@@ -28,4 +28,9 @@ public interface AlicuotaRepository extends JpaRepository<Alicuota, Integer>{
 	 // Opcional: Si quieres la suma de valores por estado
 	 @Query("SELECT CASE WHEN a.pago IS NULL THEN 'PENDIENTE' ELSE a.pago.estado END AS estado, SUM(a.valorCalculado) FROM Alicuota a JOIN a.departamento d WHERE d IN :departamentos GROUP BY estado")
 	 List<Object[]> sumAlicuotasValueByStateForDepartamentos(@Param("departamentos") List<Departamento> departamentos);
+	 
+	 @Query("SELECT COALESCE(SUM(a.valorCalculado), 0) FROM Alicuota a")
+	 Double obtenerTotalAlicuotas();
+
+	 
 }

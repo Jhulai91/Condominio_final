@@ -137,4 +137,10 @@ public class AlicuotaServiceImpl implements AlicuotaService {
 		return sumMap;
 	}
 
+	@Override
+	public Double obtenerTotalAlicuotas() {
+		// TODO Auto-generated method stub
+		 return alicuotaRepo.obtenerTotalAlicuotas();
+	}
+
 }

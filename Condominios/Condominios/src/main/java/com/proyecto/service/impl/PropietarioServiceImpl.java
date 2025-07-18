@@ -72,5 +72,11 @@ public class PropietarioServiceImpl implements PropietarioService {
         }
         return Optional.empty(); 
 	}
+
+	@Override
+	public long contarPropietarios() {
+		// TODO Auto-generated method stub
+		return propietarioRepository.count();
+	}
 	
 }

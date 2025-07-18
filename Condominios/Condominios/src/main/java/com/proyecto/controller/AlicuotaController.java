@@ -32,8 +32,8 @@ public class AlicuotaController {
 	@GetMapping("/alicuotas/lista")
 	public String mostrarFormulario(Model model,  Principal principal) {
 		List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	    
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 	    return "alicuotas_lista"; 
@@ -43,8 +43,8 @@ public class AlicuotaController {
 	public String verGastosDelMes(@RequestParam int mes, @RequestParam int anio, Model model, Principal principal) {
 		
 		List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	     
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 		
@@ -66,8 +66,8 @@ public class AlicuotaController {
 	                                Model model, Principal principal) {
 		
 		List<Usuario> usuarios = usuarioRepo.findAll();
-	     // Obtener nombre del usuario autenticado
-	        String email = principal.getName(); // si usas email como username
+	     
+	        String email = principal.getName(); 
 	        Usuario usuario = usuarioRepo.findByEmail(email);
 	        model.addAttribute("usuarioAutenticado", usuario);
 		
@@ -80,7 +80,7 @@ public class AlicuotaController {
 	            model.addAttribute("error", e.getMessage());
 	            model.addAttribute("mes", mes);
 	            model.addAttribute("anio", anio);
-	            return "alicuotas_lista"; // vuelve al formulario con el mensaje
+	            return "alicuotas_lista"; 
 	        }
 }
 	
