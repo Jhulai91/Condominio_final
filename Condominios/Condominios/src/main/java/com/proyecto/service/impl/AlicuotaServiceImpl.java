@@ -142,6 +142,8 @@ public class AlicuotaServiceImpl implements AlicuotaService {
 	public Double obtenerTotalAlicuotas() {
 		// TODO Auto-generated method stub
 		 return alicuotaRepo.obtenerTotalAlicuotas();
+		}
+	@Override
 	public Optional<Alicuota> findAlicuotaById(Integer id) {
 		return alicuotaRepo.findById(id);
 	}
