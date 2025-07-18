@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Información del Propietario</title>
+    <title>Registrar Pago - Propietario</title>
 
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -19,7 +20,7 @@
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/propietario/home}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -29,7 +30,7 @@
             <hr class="sidebar-divider my-0">
 
             <li class="nav-item">
-                <a class="nav-link" href="/propietario/home">
+                <a class="nav-link" th:href="@{/propietario/home}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span>
                 </a>
@@ -39,15 +40,15 @@
 
             <div class="sidebar-heading">Información</div>
 
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Información</span>
                 </a>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Selecciona la acción:</h6>
-                        <a class="collapse-item active" th:href="@{/propietario/informacion}">Información propietario</a>
+                        <a class="collapse-item" th:href="@{/propietario/informacion}">Información propietario</a>
                     </div>
                 </div>
             </li>
@@ -127,68 +128,77 @@
                 <div class="container-fluid">
 
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Perfil de Propietario</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Registro de Pagos</h1>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-12 mb-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Detalles de la Cuenta</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Detalles del Pago</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div th:if="${propietario}">
-                                        <dl class="row">
-                                            <dt class="col-sm-3">Nombre Completo:</dt>
-                                            <dd class="col-sm-9" th:text="${usuario.nombre}"></dd>
-                                            <dt class="col-sm-3">Correo Electrónico:</dt>
-                                            <dd class="col-sm-9" th:text="${usuario.email}"></dd>
-                                            <dt class="col-sm-3">Cédula:</dt>
-                                            <dd class="col-sm-9" th:text="${propietario.cedula}"></dd>
-                                            <dt class="col-sm-3">Teléfono:</dt>
-                                            <dd class="col-sm-9" th:text="${propietario.telefono}"></dd>
-                                            <dt class="col-sm-3">Rol:</dt>
-                                            <dd class="col-sm-9" th:text="${usuario.rol}"></dd>
-                                        </dl>
+                                    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <p th:text="${mensajeExito}"></p>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <div th:if="${mensajeError}" class="alert alert-danger" role="alert">
+                                    <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <p th:text="${mensajeError}"></p>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-lg-12 mb-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Departamentos Asignados</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div th:if="${departamentos != null and !departamentos.isEmpty()}">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Número</th>
-                                                        <th>Metros Cuadrados</th>
-                                                        <th>% Alícuota</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr th:each="depto : ${departamentos}">
-                                                        <td th:text="${depto.numero}">Apt 101</td>
-                                                        <td th:text="${depto.metrosCuadrados}">85.50</td>
-                                                        <td th:text="${depto.porcentajeAlicuota}">0.05</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                    <form th:action="@{/propietario/pagos/registrar}" th:object="${pago}" method="post" enctype="multipart/form-data">
+
+                                        <div class="form-group">
+                                            <label for="fechaPago">Fecha del Pago:</label>
+                                            <input type="date" id="fechaPago" th:field="*{fechaPago}" class="form-control" required
+                                                   th:max="${#temporals.format(#temporals.createToday(), 'yyyy-MM-dd')}">
+                                            <small class="form-text text-muted">La fecha del pago no puede ser mayor a la actual.</small>
                                         </div>
-                                    </div>
-                                    <div th:if="${departamentos == null or departamentos.isEmpty()}" class="alert alert-info" role="alert">
-                                        <p>Este propietario no tiene departamentos asignados.</p>
-                                    </div>
+
+                                        <div class="form-group">
+                                            <label for="numeroComprobante">Número de Comprobante:</label>
+                                            <input type="text" id="numeroComprobante" th:field="*{numeroComprobante}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="observaciones">Observaciones:</label>
+                                            <textarea id="observaciones" th:field="*{observaciones}" class="form-control" rows="3"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="comprobante">Comprobante de Pago:</label>
+                                            <input type="file" id="comprobante" name="comprobante" class="form-control-file" accept="application/pdf" required>
+                                            <small class="form-text text-muted">Solo se aceptan archivos PDF. Tamaño máximo recomendado: 5MB.</small>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="alicuota">Alícuota a la que corresponde el pago:</label>
+                                            <select id="alicuota" name="alicuotaId" class="form-control" required>
+                                                <option value="">Seleccione una alícuota</option>
+                                                <option th:each="alicuota : ${alicuotasDisponibles}"
+                                                        th:value="${alicuota.id}"
+                                                        th:text="${'Depto: ' + alicuota.departamento.numero +
+                                                                  ' | ' + #temporals.format(T(java.time.LocalDate).of(alicuota.anio, alicuota.mes, 1), 'MMMM yyyy') +
+                                                                  ' | Valor: $' + #numbers.formatDecimal(alicuota.valorCalculado, 1, 2)}">
+                                                </option>
+                                            </select>
+                                            <!-- <small class="form-text text-muted">Solo se muestran las alícuotas pendientes de pago.</small>-->
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Estado del Pago:</label>
+                                            <input type="text" class="form-control-plaintext" value="PENDIENTE" readonly>
+                                            <small class="form-text text-muted">El estado actual del pago es PENDIENTE y será revisado por la administración.</small>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Registrar Pago</button>
+                                        <a th:href="@{/propietario/alicuotas}" class="btn btn-secondary">Cancelar</a>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +222,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">¿Estas seguro de salir?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">¿Estás seguro de salir?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
