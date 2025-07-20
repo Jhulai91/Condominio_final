@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.proyecto.dto.AlicuotaPagoDTO;
 import com.proyecto.entity.Alicuota;
 import com.proyecto.entity.GastoComunal;
 import com.proyecto.entity.Usuario;
+import com.proyecto.repository.AlicuotaRepository;
 import com.proyecto.repository.GastoComunalRepository;
 import com.proyecto.repository.UsuarioRepository;
 import com.proyecto.service.AlicuotaService;
@@ -23,6 +25,8 @@ import com.proyecto.service.GastoComunalService;
 public class AlicuotaController {
 	@Autowired
 	private AlicuotaService alicuotaService;
+	@Autowired
+	private AlicuotaRepository alicuotaRepository;
 	@Autowired
 	private GastoComunalRepository gastoComunalRepo;
 	@Autowired
@@ -52,12 +56,26 @@ public class AlicuotaController {
 	    List<GastoComunal> gastos = gastoComunalService.findByMesAndAnio(mes, anio);
 	    double total = gastos.stream().mapToDouble(GastoComunal::getMonto).sum();
 	    double totalGeneral = gastoComunalRepo.obtenerTotalGastos();
+	    model.addAttribute("totalGastos", total);
 	    model.addAttribute("mes", mes);
 	    model.addAttribute("anio", anio);
-	    model.addAttribute("totalGastos", total);
+	   
 
 	    return "alicuotas_lista";
 	}
+	
+	@GetMapping("/alicuotas/reporte")
+	public String listarPagosConAlicuotas(Model model, Principal principal) {
+		
+
+        String email = principal.getName(); 
+        Usuario usuario = usuarioRepo.findByEmail(email);
+        model.addAttribute("usuarioAutenticado", usuario);
+		 List<AlicuotaPagoDTO> alicuotas = alicuotaRepository.listarAlicuotasConPagos();
+		 model.addAttribute("alicuotas", alicuotas);
+	    return "alicuotas_reporte";
+	}
+	
 	
 	
 	@PostMapping("/alicuotas/calcular")
@@ -83,5 +101,6 @@ public class AlicuotaController {
 	            return "alicuotas_lista"; 
 	        }
 }
+	
 	
 }

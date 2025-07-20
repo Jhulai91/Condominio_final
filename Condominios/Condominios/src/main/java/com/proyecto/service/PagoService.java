@@ -11,4 +11,6 @@ public interface PagoService {
     void deletePago(Integer id);
     Pago updatePago(Integer id, Pago pagoDetails); // Método para actualizar si es necesario
     Optional<Pago> findByNumeroComprobante(String numeroComprobante); // Método para buscar por comprobante
+    long contarPagados();
+    long contarTodosConPago();
 }

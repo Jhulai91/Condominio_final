@@ -18,6 +18,7 @@ import com.proyecto.repository.UsuarioRepository;
 import com.proyecto.service.AlicuotaService;
 import com.proyecto.service.DepartamentoService;
 import com.proyecto.service.GastoComunalService;
+import com.proyecto.service.PagoService;
 import com.proyecto.service.PropietarioService;
 
 
@@ -30,6 +31,8 @@ public class AdminController {
 	    private DepartamentoService departamentoService;
 	 @Autowired
 	    private PropietarioService propietarioService;
+	 @Autowired
+	    private PagoService pagoService;
 	 @Autowired
 	    private GastoComunalRepository gastoRepo;
 
@@ -55,6 +58,17 @@ public class AdminController {
 	 @GetMapping("/admin/home")
 	    public String adminHome(Model model) {
 		 
+		 long totalConPago = pagoService.contarTodosConPago();
+		    long pagados = pagoService.contarPagados();
+
+		    int porcentaje = totalConPago > 0 ? (int) ((pagados * 100.0) / totalConPago) : 0;
+
+		    model.addAttribute("porcentajePagadas", porcentaje);
+		    model.addAttribute("alicuotasPagadas", pagados);
+		    model.addAttribute("alicuotasConPago", totalConPago);
+		 
+		 
+		 
 		 List<GastoMensualDTO> gastosMensuales = gastoRepo.obtenerGastosPorMes();
 
 		 List<String> etiquetas = gastosMensuales.stream()
@@ -78,6 +92,10 @@ public class AdminController {
 		    long totalPropietarios = propietarioService.contarPropietarios();
 		    model.addAttribute("totalDepartamentos", totalDepartamentos);
 		    model.addAttribute("totalPropietarios", totalPropietarios);
+		    
+		    
+		    long alicuotasDelMes = alicuotaService.contarAlicuotasMesActual();
+		    model.addAttribute("alicuotasDelMes", alicuotasDelMes);
 		 
 	     return "admin-home";
 	    }

@@ -35,4 +35,6 @@ public interface AlicuotaService {
     
     Double obtenerTotalAlicuotas();
     Optional<Alicuota> findAlicuotaById(Integer id); // Asegúrate de tener este método
+    
+    long contarAlicuotasMesActual();
 }

@@ -252,84 +252,39 @@
                     <!-- Content Row -->
 
                 <div class="container mt-5">
-    <h2 class="mb-4 text-primary">Generar Alícuotas Mensuales</h2>
-    <!-- Alerta de éxito -->
-    <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${mensaje}">Alicuotas generadas correctamente</span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-    <!-- Formulario para seleccionar mes y año -->
-    <form th:action="@{/alicuotas/generar}" method="get" class="form-inline mb-4">
-    
-    
-        <label for="mes" class="mr-2">Mes:</label>
-        <select name="mes" id="mes" class="form-control mr-3">
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-        </select>
+    <h2 class="mb-4 text-primary">Listado Alícuotas</h2>
+  <!-- Botón -->
+<button onclick="exportarPDF()" class="btn btn-danger">
+    <i class="fas fa-file-pdf"></i> Exportar PDF
+</button>
 
-        <label for="anio" class="mr-2">Año:</label>
-        <input type="number" name="anio" id="anio" class="form-control mr-3" placeholder="2025" min="2000" required>
-
-        <button type="submit" class="btn btn-primary">Ver gastos</button>
-    </form>
-
-    <!-- Mostrar gastos totales del mes -->
-    <div th:if="${totalGastos != null}">
-        <h4 class="text-success">Gastos totales del mes: $<span th:text="${totalGastos}">0.00</span></h4>
-
-<!-- Botón que abre el modal -->
-        <button type="button" class="btn btn-success mt-3" data-toggle="modal" data-target="#confirmarModal">
-            Calcular alícuotas
-        </button>
-
-        <form  id="formGenerarAlicuotas" th:action="@{/alicuotas/calcular}" method="post">
-            <input type="hidden" name="mes" th:value="${mes}" />
-            <input type="hidden" name="anio" th:value="${anio}" />
-            <!--  <button type="submit" class="btn btn-success mt-3">Calcular alícuotas</button>-->
-        </form>
-        
-     
-    </div>
-
- <!-- Modal de confirmación -->
-    <div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title" id="modalLabel">¿Confirmar generación?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ¿Está seguro que desea generar las alícuotas para este mes y año? Esta acción no se puede deshacer.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="document.getElementById('formGenerarAlicuotas').submit();">Sí, generar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mensaje si no hay gastos -->
-    <div th:if="${totalGastos == 0}">
-        <p class="text-danger">No se encontraron gastos para ese mes.</p>
-    </div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Departamento</th>
+            <th>Propietario</th>
+            <th>Mes</th>
+            <th>Año</th>
+            <th>Valor Calculado</th>
+            <th>Estado de Pago</th>
+            <th>Fecha de Pago</th>
+            <th>Comprobante</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="a : ${alicuotas}">
+            <td th:text="${a.numeroDepartamento}">101</td>
+            <td th:text="${a.propietario}">Juan Pérez</td>
+            <td th:text="${a.mes}">7</td>
+            <td th:text="${a.anio}">2025</td>
+            <td th:text="${a.valorCalculado} + ' USD'">150 USD</td>
+            <td th:text="${a.estadoPago != null ? a.estadoPago : 'NO PAGADO'}">NO PAGADO</td>
+            <td th:text="${a.fechaPago != null ? a.fechaPago : '-'}">-</td>
+            <td th:text="${a.numeroComprobante != null ? a.numeroComprobante : '-'}">-</td>
+        </tr>
+    </tbody>
+</table>
+</div>
 </div>
 
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -394,6 +349,9 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -410,7 +368,21 @@
     <script src="/js/demo/chart-area-demo.js"></script>
     <script src="/js/demo/chart-pie-demo.js"></script>
 
+<script>
+    function exportarPDF() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
 
+        html2canvas(document.querySelector(".table")).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+            pdf.save("alicuotas.pdf");
+        });
+    }
+</script>
 
 
 </body>

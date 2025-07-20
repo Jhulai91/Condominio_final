@@ -1,5 +1,6 @@
 package com.proyecto.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,10 +143,17 @@ public class AlicuotaServiceImpl implements AlicuotaService {
 	public Double obtenerTotalAlicuotas() {
 		// TODO Auto-generated method stub
 		 return alicuotaRepo.obtenerTotalAlicuotas();
-		}
-	@Override
-	public Optional<Alicuota> findAlicuotaById(Integer id) {
+	
+	}
+		 public Optional<Alicuota> findAlicuotaById(Integer id) {
 		return alicuotaRepo.findById(id);
 	}
+
+		@Override
+		public long contarAlicuotasMesActual() {
+			// TODO Auto-generated method stub
+			 LocalDate ahora = LocalDate.now();
+		        return alicuotaRepo.contarGeneradasEnMes(ahora.getMonthValue(), ahora.getYear());
+		}
 
 }

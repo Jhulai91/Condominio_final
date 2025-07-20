@@ -61,4 +61,16 @@ public class PagoServiceImpl implements PagoService {
     public Optional<Pago> findByNumeroComprobante(String numeroComprobante) {
         return pagoRepository.findByNumeroComprobante(numeroComprobante);
     }
+
+	@Override
+	public long contarPagados() {
+		// TODO Auto-generated method stub
+		 return pagoRepository.countByEstado("PAGADO");
+	}
+
+	@Override
+	public long contarTodosConPago() {
+		// TODO Auto-generated method stub
+		return pagoRepository.count();
+	}
 }

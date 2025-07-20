@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface PagoRepository extends JpaRepository<Pago, Integer> {
 
     Optional<Pago> findByNumeroComprobante(String numeroComprobante);
+    
+    long countByEstado(String estado); 
+
+    long count(); 
 }
