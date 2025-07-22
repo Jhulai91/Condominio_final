@@ -146,6 +146,8 @@
 					</div>
 				</div></li>
 
+			<!-- 
+
 			<li class="nav-item"><a class="nav-link collapsed" href="#"
 				data-toggle="collapse" data-target="#collapsePages2"
 				aria-expanded="true" aria-controls="collapsePages"> <i
@@ -161,6 +163,8 @@
 						<a class="collapse-item" href="forgot-password.html">Gastos</a>
 					</div>
 				</div></li>
+
+ -->
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -255,12 +259,17 @@
     <h2 class="mb-4 text-primary">Generar Alícuotas Mensuales</h2>
     <!-- Alerta de éxito -->
     <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
-        <span th:text="${mensaje}">Alicuotas generadas correctamente</span>
+        <span th:text="${mensaje}"></span>
         <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+<div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span th:text="${error}"></span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
     <!-- Formulario para seleccionar mes y año -->
     <form th:action="@{/alicuotas/generar}" method="get" class="form-inline mb-4">
     
@@ -299,6 +308,7 @@
         <form  id="formGenerarAlicuotas" th:action="@{/alicuotas/calcular}" method="post">
             <input type="hidden" name="mes" th:value="${mes}" />
             <input type="hidden" name="anio" th:value="${anio}" />
+            
             <!--  <button type="submit" class="btn btn-success mt-3">Calcular alícuotas</button>-->
         </form>
         

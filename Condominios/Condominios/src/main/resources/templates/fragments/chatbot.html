@@ -1,0 +1,99 @@
+<div th:fragment="chatbot">
+    <!-- Ícono flotante animado con mensaje -->
+    <div id="chatbot-toggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; cursor: pointer;" onclick="toggleChatbot()">
+        <!-- Burbuja de mensaje -->
+        <div class="chatbot-tooltip animate__animated animate__fadeInUp">
+            💬 Hola, soy tu asistente virtual
+        </div>
+        <!-- Ícono -->
+        <i class="fas fa-robot fa-2x text-primary animate__heartBeat animate__infinite"></i>
+    </div>
+
+    <!-- Ventana del chatbot -->
+    <div id="chatbot-box" class="card shadow-lg animate__animated" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 320px; z-index: 10000; border-radius: 12px;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-2">
+            <span><i class="fas fa-robot mr-1"></i> Asistente del Sistema</span>
+            <button type="button" class="close text-white" onclick="toggleChatbot()">&times;</button>
+        </div>
+        <div class="card-body p-2" id="chatbot-messages" style="height: 250px; overflow-y: auto; font-size: 14px;">
+            <div class="text-muted"><em>Hola, soy tu asistente. ¿En qué puedo ayudarte?</em></div>
+        </div>
+        <div class="card-footer p-2 d-flex">
+            <input type="text" id="chatbot-input" class="form-control form-control-sm mr-1" placeholder="Escribe tu pregunta..." onkeydown="if(event.key === 'Enter') sendMessage()">
+            <button class="btn btn-sm btn-primary" onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        .chatbot-tooltip {
+            background-color: #007bff;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            position: absolute;
+            bottom: 45px;
+            right: 0;
+            white-space: nowrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            animation-delay: 1s;
+        }
+
+        /* Flecha del tooltip */
+        .chatbot-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            right: 10px;
+            margin-left: -5px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #007bff transparent transparent transparent;
+        }
+    </style>
+
+    <!-- JS -->
+    <script>
+        let visible = false;
+
+        function toggleChatbot() {
+            const box = document.getElementById("chatbot-box");
+            const tooltip = document.querySelector(".chatbot-tooltip");
+
+            if (visible) {
+                box.classList.remove("animate__fadeInUp");
+                box.classList.add("animate__fadeOutDown");
+                setTimeout(() => box.style.display = "none", 400);
+            } else {
+                box.style.display = "block";
+                box.classList.remove("animate__fadeOutDown");
+                box.classList.add("animate__fadeInUp");
+
+                // Oculta el mensaje una vez que se abrió
+                if (tooltip) tooltip.style.display = "none";
+            }
+            visible = !visible;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById("chatbot-input");
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const messages = document.getElementById("chatbot-messages");
+            messages.innerHTML += `<div class="text-right text-primary"><strong>Tú:</strong> ${msg}</div>`;
+
+            fetch('/chatbot/ask?question=' + encodeURIComponent(msg))
+                .then(resp => resp.text())
+                .then(answer => {
+                    messages.innerHTML += `<div class="text-left text-dark"><strong>Bot:</strong> ${answer}</div>`;
+                    messages.scrollTop = messages.scrollHeight;
+                });
+
+            input.value = "";
+        }
+    </script>
+</div>

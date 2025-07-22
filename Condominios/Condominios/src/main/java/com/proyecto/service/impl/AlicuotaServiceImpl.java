@@ -80,7 +80,7 @@ public class AlicuotaServiceImpl implements AlicuotaService {
 
 		for (Departamento dep : departamentos) {
 			double porcentaje = dep.getPorcentajeAlicuota();
-			double valor = (porcentaje / 100.0) * totalGastos;
+			double valor = Math.round(((porcentaje / 100.0) * totalGastos) * 100.0) / 100.0;
 
 			Alicuota a = new Alicuota();
 			a.setMes(mes);

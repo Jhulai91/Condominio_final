@@ -158,22 +158,25 @@
                 </div>
             </li>
             
-<li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Reportes</span>
-                </a>
-                <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Selecciona una opción:</h6>
-                        <a class="collapse-item" href="login.html">Propietarios</a>
-                        <a class="collapse-item" href="register.html">Alicuotas</a>
-                        <a class="collapse-item" href="forgot-password.html">Departamentos</a>
-                        <a class="collapse-item" href="forgot-password.html">Gastos</a>
-                    </div>
-                </div>
-            </li>
+<!-- 
+
+			<li class="nav-item"><a class="nav-link collapsed" href="#"
+				data-toggle="collapse" data-target="#collapsePages2"
+				aria-expanded="true" aria-controls="collapsePages"> <i
+					class="fas fa-fw fa-folder"></i> <span>Reportes</span>
+			</a>
+				<div id="collapsePages2" class="collapse"
+					aria-labelledby="headingPages" data-parent="#accordionSidebar">
+					<div class="bg-white py-2 collapse-inner rounded">
+						<h6 class="collapse-header">Selecciona una opción:</h6>
+						<a class="collapse-item" href="login.html">Propietarios</a> <a
+							class="collapse-item" href="register.html">Alicuotas</a> <a
+							class="collapse-item" href="forgot-password.html">Departamentos</a>
+						<a class="collapse-item" href="forgot-password.html">Gastos</a>
+					</div>
+				</div></li>
+
+ -->
            
 
             <!-- Divider -->
@@ -275,7 +278,8 @@
         <!-- Datos del Usuario -->
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input type="text" th:field="*{nombre}" class="form-control" id="nombre" required>
+            <input type="text" th:field="*{nombre}" class="form-control" id="nombre" required pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+           title="Solo letras y espacios permitidos">
         </div>
 
         <div class="form-group">
@@ -304,12 +308,16 @@
             <input type="hidden" th:field="*{propietario.id}"/>
             
                 <label for="cedula">Cédula</label>
-                <input type="text" th:field="*{propietario.cedula}" class="form-control" id="cedula">
+                <input type="text" th:field="*{propietario.cedula}" class="form-control" id="cedula" pattern="^\d{10}$"  title="Ingrese una cédula válida de 10 dígitos" maxlength="10" minlength="10">
             </div>
 
             <div class="form-group">
                 <label for="telefono">Teléfono</label>
-                <input type="text" th:field="*{propietario.telefono}" class="form-control" id="telefono">
+                <input type="text" th:field="*{propietario.telefono}" class="form-control" id="telefono" pattern="09[0-9]{8}"
+           					oninput="this.value = this.value.replace(/[^0-9]/g, '')"maxlength="10" minlength="10" required>
+           					 <div class="invalid-feedback">
+        					Ingrese un número válido que comience con 09 y tenga 10 dígitos.
+   						 </div>
             </div>
 
             

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
@@ -168,6 +169,7 @@
 
 					</div>
 				</div></li>
+<!-- 
 
 			<li class="nav-item"><a class="nav-link collapsed" href="#"
 				data-toggle="collapse" data-target="#collapsePages2"
@@ -185,7 +187,7 @@
 					</div>
 				</div></li>
 
-
+ -->
 			<!-- Divider -->
 			<hr class="sidebar-divider d-none d-md-block">
 
@@ -595,6 +597,7 @@ const totalPropietarios = parseInt(datos.dataset.propietarios);
 
 
 
+
 					<!-- Content Row -->
 					<div class="row">
 
@@ -670,6 +673,7 @@ const totalPropietarios = parseInt(datos.dataset.propietarios);
 				<!-- Page level custom scripts -->
 				<!--  <script src="/js/demo/chart-area-demo.js"></script>
 				<script src="/js/demo/chart-pie-demo.js"></script>-->
+<div th:replace="fragments/chatbot :: chatbot"></div>
 
 </body>
 

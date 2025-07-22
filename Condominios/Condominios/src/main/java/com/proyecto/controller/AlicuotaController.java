@@ -92,6 +92,7 @@ public class AlicuotaController {
 	        try {
 	    List<Alicuota> alicuotas = alicuotaService.calcularAlicuotasPorMesYAnio(mes, anio);
 	    model.addAttribute("alicuotas", alicuotas);
+	    model.addAttribute("mensaje", "Alícuotas generadas correctamente.");
 	   
 	    return "alicuotas_lista";
 	        } catch (RuntimeException e) {
